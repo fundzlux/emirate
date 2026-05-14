@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLuxury Airways | Fly Better</title>
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/3125/3125713.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gold: #d4af37;
+            --emirates-red: #d71921;
+            --dark-blue: #003580;
+            --white: #ffffff;
+            --light-gray: #f4f4f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--emirates-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--emirates-red);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: var(--dark-blue);
+            border: 2px solid var(--dark-blue);
+        }
+
+        .login-btn:hover {
+            background: var(--dark-blue);
+            color: white;
+        }
+
+        .signup-btn {
+            background: var(--emirates-red);
+            color: white;
+        }
+
+        .signup-btn:hover {
+            background: #b3151b;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1540339832862-47452993c66e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Booking Widget */
+        .booking-widget {
+            background: white;
+            width: 85%;
+            max-width: 1100px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            margin-top: -60px;
+            margin-left: auto;
+            margin-right: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .input-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-box label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #777;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .input-box input, .input-box select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .search-flights {
+            background: var(--primary-gold);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            height: 50px;
+            align-self: flex-end;
+        }
+
+        .search-flights:hover {
+            background: #b8952d;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .booking-widget { width: 95%; margin-top: -30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fas fa-plane-departure"></i> SkyLuxury</div>
+        <ul class="nav-links">
+            <li><a href="#">Book</a></li>
+            <li><a href="#">Manage</a></li>
+            <li><a href="#">Where we fly</a></li>
+            <li><a href="#">Loyalty</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="login.html" class="btn login-btn">Log In</a>
+            <a href="signup.html" class="btn signup-btn">Sign Up</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Fly Better, Fly Higher.</h1>
+        <p>Experience world-class service to over 150 destinations.</p>
+    </header>
+
+    <section class="booking-widget">
+        <div class="input-box">
+            <label><i class="fas fa-map-marker-alt"></i> Departure</label>
+            <input type="text" placeholder="From (e.g. Dubai, DXB)">
+        </div>
+        <div class="input-box">
+            <label><i class="fas fa-plane-arrival"></i> Arrival</label>
+            <input type="text" placeholder="To (e.g. New York, JFK)">
+        </div>
+        <div class="input-box">
+            <label><i class="fas fa-calendar-alt"></i> Date</label>
+            <input type="date">
+        </div>
+        <div class="input-box">
+            <label><i class="fas fa-users"></i> Passengers</label>
+            <select>
+                <option>1 Passenger (Economy)</option>
+                <option>1 Passenger (Business)</option>
+                <option>1 Passenger (First Class)</option>
+            </select>
+        </div>
+        <button class="search-flights">Search Flights</button>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join SkyLuxury | Create Your Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gold: #d4af37;
+            --emirates-red: #d71921;
+            --dark-blue: #003580;
+            --white: #ffffff;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1520437358207-323b43b50729?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            border-top: 5px solid var(--emirates-red);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--emirates-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        h2 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon-wrapper i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 12px 12px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--emirates-red);
+            box-shadow: 0 0 8px rgba(215, 25, 33, 0.1);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--emirates-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .signup-btn:hover {
+            background: #b3151b;
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .footer-links a {
+            color: var(--dark-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Success Animation */
+        #loader {
+            display: none;
+            margin-top: 10px;
+            color: var(--emirates-red);
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <a href="index.html" class="logo"><i class="fas fa-plane-departure"></i> SkyLuxury</a>
+        <h2>Create Account</h2>
+        <p class="subtitle">Join SkyLuxury Rewards and start your journey.</p>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <div class="input-icon-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-icon-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-icon-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Min. 8 characters" required>
+                </div>
+            </div>
+
+            <button type="submit" class="signup-btn">
+                Create Account <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <div id="loader"><i class="fas fa-spinner fa-spin"></i> Setting up your dashboard...</div>
+        </form>
+
+        <div class="footer-links">
+            Already a member? <a href="login.html">Log In</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page from refreshing
+            
+            const name = document.getElementById('fullName').value;
+            const loader = document.getElementById('loader');
+            const btn = document.querySelector('.signup-btn');
+
+            // 1. Save user info to LocalStorage (to use on dashboard)
+            localStorage.setItem('userName', name);
+            localStorage.setItem('isLoggedIn', 'true');
+
+            // 2. Show loading effect
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+
+            // 3. Redirect to dashboard.html after 1.5 seconds
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

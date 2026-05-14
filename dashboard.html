@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLuxury | Global Booking Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --emirates-red: #d71921;
+            --gold: #d4af37;
+            --dark: #121212;
+            --bg: #f8f9fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { background: var(--bg); display: flex; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--dark);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar h2 { color: var(--emirates-red); margin-bottom: 40px; font-size: 22px; letter-spacing: 1px; text-align: center; }
+
+        .nav-item {
+            padding: 15px;
+            color: #aaa;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .nav-item:hover, .nav-item.active { background: #1e1e1e; color: var(--gold); }
+        .nav-item i { width: 20px; text-align: center; }
+
+        /* Main Content */
+        .main-content { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .welcome-msg h1 { font-size: 26px; color: var(--dark); }
+        .cart-btn {
+            background: var(--emirates-red);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        /* Flight Grid */
+        .flight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .flight-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #efefef;
+            transition: 0.4s ease-in-out;
+        }
+
+        .flight-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+
+        .image-container {
+            width: 100%;
+            height: 170px;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            font-weight: 300;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .details { padding: 25px; }
+
+        .route {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .code { font-size: 22px; font-weight: 800; color: var(--dark); display: block; }
+        .city { font-size: 12px; color: #888; text-transform: uppercase; }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .price { font-size: 24px; font-weight: 700; color: var(--emirates-red); }
+
+        .book-now {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .book-now:hover { background: var(--emirates-red); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; }
+            .sidebar h2, .nav-item span { display: none; }
+            .main-content { margin-left: 80px; width: calc(100% - 80px); }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>SKY LUXURY</h2>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i> <span>Home</span></a>
+        <a href="#" class="nav-item active"><i class="fas fa-plane"></i> <span>Search Flights</span></a>
+        <a href="cart.html" class="nav-item"><i class="fas fa-shopping-cart"></i> <span>My Cart</span></a>
+        <a href="booking.html" class="nav-item"><i class="fas fa-list-ul"></i> <span>Live Bookings</span></a>
+        <a href="login.html" class="nav-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </aside>
+
+    <main class="main-content">
+        <header class="header">
+            <div class="welcome-msg">
+                <h1>Welcome, <span id="user-name">Guest</span></h1>
+                <p>Global routes at your fingertips.</p>
+            </div>
+            <a href="cart.html" class="cart-btn">
+                <i class="fas fa-cart-arrow-down"></i> Cart: <span id="cart-count">0</span>
+            </a>
+        </header>
+
+        <div class="flight-grid" id="flight-grid">
+            </div>
+    </main>
+
+    <script>
+        // Personalization
+        document.getElementById('user-name').innerText = localStorage.getItem('userName') || "Passenger";
+
+        const routes = [
+            { f: "JFK", fn: "New York", t: "LHR", tn: "London", p: 1250 },
+            { f: "DXB", fn: "Dubai", t: "CDG", tn: "Paris", p: 890 },
+            { f: "LAX", fn: "Los Angeles", t: "HND", tn: "Tokyo", p: 1100 },
+            { f: "YYZ", fn: "Toronto", t: "FCO", tn: "Rome", p: 920 },
+            { f: "MIA", fn: "Miami", t: "EZE", tn: "Buenos Aires", p: 750 },
+            { f: "SFO", fn: "San Francisco", t: "SYD", tn: "Sydney", p: 1450 },
+            { f: "ORD", fn: "Chicago", t: "FRA", tn: "Frankfurt", p: 880 },
+            { f: "ATL", fn: "Atlanta", t: "MEX", tn: "Mexico City", p: 420 },
+            { f: "DFW", fn: "Dallas", t: "GRU", tn: "Sao Paulo", p: 980 },
+            { f: "BOS", fn: "Boston", t: "DUB", tn: "Dublin", p: 680 },
+            { f: "SEA", fn: "Seattle", t: "ICN", tn: "Seoul", p: 1150 },
+            { f: "LAS", fn: "Las Vegas", t: "HNL", tn: "Honolulu", p: 390 },
+            { f: "YVR", fn: "Vancouver", t: "AKL", tn: "Auckland", p: 1300 },
+            { f: "LHR", fn: "London", t: "CPT", tn: "Cape Town", p: 1200 },
+            { f: "SIN", fn: "Singapore", t: "BKK", tn: "Bangkok", p: 250 },
+            { f: "HKG", fn: "Hong Kong", t: "TPE", tn: "Taipei", p: 310 },
+            { f: "IST", fn: "Istanbul", t: "DXB", tn: "Dubai", p: 550 },
+            { f: "MAD", fn: "Madrid", t: "LIS", tn: "Lisbon", p: 140 },
+            { f: "AMS", fn: "Amsterdam", t: "ZRH", tn: "Zurich", p: 220 },
+            { f: "CPH", fn: "Copenhagen", t: "OSL", tn: "Oslo", p: 180 },
+            { f: "DEL", fn: "New Delhi", t: "SIN", tn: "Singapore", p: 480 },
+            { f: "MEL", fn: "Melbourne", t: "CHC", tn: "Christchurch", p: 320 },
+            { f: "PHX", fn: "Phoenix", t: "YYC", tn: "Calgary", p: 450 },
+            { f: "DEN", fn: "Denver", t: "KEF", tn: "Iceland", p: 790 },
+            { f: "BCN", fn: "Barcelona", t: "ATH", tn: "Athens", p: 280 },
+            { f: "YUL", fn: "Montreal", t: "CDG", tn: "Paris", p: 810 },
+            { f: "MEX", fn: "Mexico City", t: "LIM", tn: "Lima", p: 540 },
+            { f: "CAI", fn: "Cairo", t: "IST", tn: "Istanbul", p: 360 },
+            { f: "MNL", fn: "Manila", t: "NRT", tn: "Tokyo", p: 490 },
+            { f: "BNE", fn: "Brisbane", t: "NAN", tn: "Fiji", p: 560 }
+        ];
+
+        const grid = document.getElementById('flight-grid');
+
+        routes.forEach(route => {
+            grid.innerHTML += `
+                <div class="flight-card">
+                    <div class="image-container">[ Luxury Image of ${route.tn} ]</div>
+                    <div class="details">
+                        <div class="route">
+                            <div><span class="code">${route.f}</span><span class="city">${route.fn}</span></div>
+                            <i class="fas fa-plane" style="color: var(--gold)"></i>
+                            <div><span class="code">${route.t}</span><span class="city">${route.tn}</span></div>
+                        </div>
+                        <p style="font-size: 13px; color: #777;"><i class="far fa-clock"></i> Scheduled • Economy/Business</p>
+                        <div class="price-row">
+                            <span class="price">$${route.p}</span>
+                            <button class="book-now" onclick="addToCart('${route.fn} to ${route.tn}', ${route.p})">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        function addToCart(item, price) {
+            let cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
+            cart.push({ flight: item, price: price });
+            localStorage.setItem('airlineCart', JSON.stringify(cart));
+            updateCart();
+            alert(item + " added to your cart!");
+        }
+
+        function updateCart() {
+            let cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        updateCart();
+    </script>
+</body>
+</html>

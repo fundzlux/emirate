@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bookings | SkyLuxury Airways</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --emirates-red: #d71921;
+            --gold: #d4af37;
+            --dark: #121212;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            background: var(--dark);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow: hidden; /* Keeps the focus on the scrolling list */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .header {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #1a1a1a, var(--dark));
+            width: 100%;
+            z-index: 10;
+            border-bottom: 1px solid #333;
+        }
+
+        .header h1 {
+            color: var(--gold);
+            margin: 0;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #888;
+            margin: 5px 0 0;
+        }
+
+        /* The scrolling container */
+        .feed-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(transparent, black 10%, black 90%, transparent);
+        }
+
+        .scrolling-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px 0;
+            animation: scrollUp 120s linear infinite; /* Adjust speed here */
+        }
+
+        /* Animation logic */
+        @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-80%); } /* Scrolls through the list */
+        }
+
+        .ticket-entry {
+            background: var(--glass);
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .ticket-entry:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-info i { color: var(--emirates-red); font-size: 20px; }
+        
+        .name { font-weight: 600; color: #fff; }
+        .route { font-size: 13px; color: #aaa; }
+
+        .status {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .time { font-size: 12px; color: #555; }
+
+        .nav-back {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--emirates-red);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1><i class="fas fa-globe"></i> Live Global Bookings</h1>
+        <p>Real-time ticket reservations from around the world</p>
+    </div>
+
+    <div class="feed-container">
+        <div class="scrolling-wrapper" id="ticket-feed">
+            </div>
+    </div>
+
+    <a href="dashboard.html" class="nav-back">
+        <i class="fas fa-arrow-left"></i> Return to Dashboard
+    </a>
+
+    <script>
+        const names = ["James", "Maria", "Ahmed", "Li", "Sarah", "Yusuf", "Elena", "Kojo", "Chloe", "Hiroshi", "Anita", "David", "Sofia", "Omar", "Linda"];
+        const routes = [
+            "Dubai to New York", "London to Tokyo", "Paris to Toronto", 
+            "Singapore to Sydney", "New York to Paris", "Dubai to London",
+            "Toronto to Rome", "Los Angeles to Seoul", "Mumbai to Dubai"
+        ];
+
+        const feed = document.getElementById('ticket-feed');
+
+        // Function to generate a random ticket
+        function createTicket(index) {
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            const randomRoute = routes[Math.floor(Math.random() * routes.length)];
+            const randomTime = Math.floor(Math.random() * 59) + 1;
+
+            const ticketHTML = `
+                <div class="ticket-entry">
+                    <div class="user-info">
+                        <i class="fas fa-ticket-alt"></i>
+                        <div>
+                            <div class="name">${randomName} **** booked a seat</div>
+                            <div class="route">${randomRoute}</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="status">Confirmed</div>
+                        <div class="time">${randomTime}m ago</div>
+                    </div>
+                </div>
+            `;
+            return ticketHTML;
+        }
+
+        // Generate 2000 items
+        let allTickets = "";
+        for (let i = 0; i < 2000; i++) {
+            allTickets += createTicket(i);
+        }
+        feed.innerHTML = allTickets;
+    </script>
+</body>
+</html>
