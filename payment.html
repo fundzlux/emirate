@@ -1,129 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Verification | SkyLuxury</title>
+    <title>Secure Checkout | SkyLuxury</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
-        .payment-wrapper {
-            max-width: 450px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
+        :root {
+            --emirates-red: #d71921;
+            --gold: #d4af37;
+            --dark: #121212;
         }
-        .invoice-box {
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .item-row {
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f7f6;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        .zangi-call-to-action {
-            background: #ff5722;
-            color: white;
-            padding: 18px;
-            border-radius: 10px;
-            text-decoration: none;
-            display: block;
-            font-weight: 700;
-            margin-top: 20px;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
+
+        .payment-card {
+            background: white;
             width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 8px solid var(--emirates-red);
         }
-        .zangi-call-to-action:hover {
-            background: #e64a19;
-            transform: scale(1.02);
+
+        .paypal-logo {
+            width: 120px;
+            margin-bottom: 20px;
         }
-        .instruction {
-            font-size: 13px;
-            color: #666;
-            margin-top: 15px;
+
+        .timer-box {
+            background: #fff5f5;
+            color: var(--emirates-red);
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ffebeb;
         }
+
+        .account-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+            margin-bottom: 25px;
+        }
+
+        .email-display {
+            font-weight: 700;
+            color: var(--dark);
+            word-break: break-all;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .copy-btn {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 18px;
+            background: #0070ba; /* PayPal Blue */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #status-area {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0070ba;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .success-msg { color: #28a745; font-weight: 700; }
+        .error-msg { color: var(--emirates-red); font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="payment-wrapper">
-        <i class="fas fa-plane-arrival" style="font-size: 40px; color: var(--emirates-red);"></i>
-        <h2 style="margin-top: 10px;">Finalize Booking</h2>
-        <p style="font-size: 14px; color: #777;">Review your cart and request payment info via Zangi.</p>
+    <div class="payment-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="paypal-logo">
+        
+        <h2>Complete Payment</h2>
+        <p style="font-size: 14px; color: #666;">Send exact amount to the account below.</p>
 
-        <div class="invoice-box" id="invoice-content">
-            </div>
+        <div class="timer-box" id="countdown">10:00</div>
 
-        <div style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">
-            Total: <span id="total-price" style="color: var(--emirates-red);">$0</span>
+        <div class="account-details">
+            <span style="font-size: 12px; color: #888;">PAYPAL RECIPIENT:</span>
+            <span class="email-display" id="paypal-email">iibrahimismaela@gmail.com</span>
+            <button class="copy-btn" onclick="copyEmail()"><i class="far fa-copy"></i> Copy Email</button>
         </div>
 
-        <button class="zangi-call-to-action" onclick="initiateZangiTransfer()">
-            CHAT AGENT FOR PAYMENT <i class="fab fa-telegram-plane"></i>
-        </button>
+        <button class="verify-btn" id="main-btn" onclick="startDetection()">I HAVE SENT PAYMENT</button>
 
-        <p class="instruction">
-            <i class="fas fa-info-circle"></i> Your order details will be copied automatically. Just paste them to the agent.
-        </p>
+        <div id="status-area">
+            <div id="scanning">
+                <div class="loader"></div>
+                <p style="font-size: 13px; color: #555;">Scanning Blockchain & PayPal Records...</p>
+            </div>
+            <div id="result"></div>
+        </div>
     </div>
 
     <script>
-        function renderInvoice() {
-            const cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
-            const container = document.getElementById('invoice-content');
-            const totalEl = document.getElementById('total-price');
-            let total = 0;
-            let summaryText = "";
+        // 1. Countdown Logic (10 Minutes)
+        let time = 600; 
+        const countdownEl = document.getElementById('countdown');
 
-            if (cart.length === 0) {
-                container.innerHTML = "<p>Your cart is empty.</p>";
-                return;
+        const timer = setInterval(() => {
+            let minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            countdownEl.innerHTML = `${minutes}:${seconds}`;
+            
+            if (time <= 0) {
+                clearInterval(timer);
+                refreshAccount();
             }
+            time--;
+        }, 1000);
 
-            cart.forEach((item, index) => {
-                total += item.price;
-                summaryText += `${index + 1}. ${item.flight} ($${item.price})\n`;
-                container.innerHTML += `
-                    <div class="item-row">
-                        <span>${item.flight}</span>
-                        <strong>$${item.price}</strong>
-                    </div>`;
-            });
-
-            totalEl.innerText = `$${total.toLocaleString()}`;
-            
-            // Store the message data for the chat
-            const user = localStorage.getItem('userName') || "Customer";
-            const finalMsg = `SKYLUXURY ORDER\n------------------\nPassenger: ${user}\nFlights:\n${summaryText}\nGRAND TOTAL: $${total.toLocaleString()}\n------------------\nRequesting payment instructions.`;
-            localStorage.setItem('pendingOrderMessage', finalMsg);
+        // 2. Refresh Logic
+        function refreshAccount() {
+            document.getElementById('paypal-email').style.color = 'red';
+            alert("Session Expired. The PayPal account has been refreshed for security.");
+            location.reload(); 
         }
 
-        function initiateZangiTransfer() {
-            const zangiID = "6811751202";
-            const message = localStorage.getItem('pendingOrderMessage');
-            
-            // Copy details so they can be pasted in the DM
-            navigator.clipboard.writeText(message).then(() => {
-                alert("Booking details copied! Now paste them in the Zangi chat to receive payment info.");
-                // Redirect to the direct DM of the ID provided
-                window.location.href = `https://zangi.com/dl/chat?number=${zangiID}`;
-            });
+        // 3. Copy Function
+        function copyEmail() {
+            const email = document.getElementById('paypal-email').innerText;
+            navigator.clipboard.writeText(email);
+            alert("Email copied to clipboard!");
         }
 
-        renderInvoice();
+        // 4. Detection Simulation
+        function startDetection() {
+            const btn = document.getElementById('main-btn');
+            const statusArea = document.getElementById('status-area');
+            const scanning = document.getElementById('scanning');
+            const result = document.getElementById('result');
+
+            btn.disabled = true;
+            statusArea.style.display = 'block';
+
+            // Simulate "Detection" lag
+            setTimeout(() => {
+                scanning.style.display = 'none';
+                
+                // Logic: If time is still left, show received (Mock logic)
+                if (time > 0) {
+                    result.innerHTML = `
+                        <div class="success-msg">
+                            <i class="fas fa-check-circle"></i> PAYMENT RECEIVED!<br>
+                            <span style="font-size: 12px; color: #555;">Redirecting to dashboard...</span>
+                        </div>`;
+                    setTimeout(() => window.location.href = 'dashboard.html', 3000);
+                } else {
+                    result.innerHTML = `<div class="error-msg">Transaction Not Found. Please try again.</div>`;
+                    btn.disabled = false;
+                }
+            }, 4000); // 4 seconds of "scanning"
+        }
     </script>
 </body>
 </html>
