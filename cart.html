@@ -20,7 +20,7 @@
 <body class="bg-gray-50">
 
     <nav class="bg-white p-5 shadow-sm flex justify-between items-center px-6 lg:px-16 border-b border-gray-100">
-        <div class="text-2xl font-bold tracking-widest text-[#111]" onclick="window.location.href='dashboard.html'" class="cursor-pointer">
+        <div class="text-2xl font-bold tracking-widest text-[#111] cursor-pointer" onclick="window.location.href='dashboard.html'">
             <span class="text-[#d71921]">SKY</span><span class="font-light text-gray-500 mx-1">|</span>LUXURY
         </div>
         <a href="dashboard.html" class="text-sm font-bold tracking-wide uppercase text-gray-600 hover:text-[#d71921] transition">
@@ -28,35 +28,86 @@
         </a>
     </nav>
 
-    <div class="container mx-auto my-12 px-4 max-w-5xl">
-        <h1 class="text-3xl font-serif text-gray-900 mb-2">Review Your Itinerary Selection</h1>
-        <p class="text-gray-500 text-sm mb-8">Confirm your premium details and finish securing your booking reservation.</p>
+    <div class="container mx-auto my-12 px-4 max-w-6xl">
+        <h1 class="text-3xl font-serif text-gray-900 mb-2">Configure Your Itinerary</h1>
+        <p class="text-gray-500 text-sm mb-8">Adjust your cabin class preferences and passenger layout below.</p>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-2 space-y-6">
                 <div id="cart-container">
                     </div>
                 
+                <div id="customization-panel" class="bg-white p-6 rounded-xl shadow-md border border-gray-100 hidden">
+                    <h3 class="text-lg font-serif font-bold text-gray-900 mb-4 pb-2 border-b"><i class="fas fa-sliders-h text-[#c4a47c] mr-2"></i>Flight Configurations</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Cabin Class</label>
+                            <select id="cabin-class" onchange="recalculateTotals()" class="w-full bg-gray-50 border border-gray-200 p-3 rounded text-sm text-gray-800 font-medium focus:outline-none focus:border-[#c4a47c]">
+                                <option value="economy">Economy Class (Standard Rate)</option>
+                                <option value="business">Business Class (2x Base Fare)</option>
+                                <option value="first" selected>First Class Suite (Premium Luxury Tier)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Passengers</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block text-center uppercase">Adults</span>
+                                    <select id="count-adults" onchange="recalculateTotals()" class="w-full bg-gray-50 border border-gray-200 p-2 rounded text-sm text-center">
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block text-center uppercase">Child</span>
+                                    <select id="count-children" onchange="recalculateTotals()" class="w-full bg-gray-50 border border-gray-200 p-2 rounded text-sm text-center">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-400 block text-center uppercase">Infant</span>
+                                    <select id="count-infants" onchange="recalculateTotals()" class="w-full bg-gray-50 border border-gray-200 p-2 rounded text-sm text-center">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <button onclick="clearCart()" id="clear-btn" class="hidden text-xs text-red-600 font-bold tracking-wider uppercase border border-red-200 rounded px-4 py-2 hover:bg-red-50 transition">
-                    <i class="fas fa-trash-alt mr-1"></i> Empty Selection
+                    <i class="fas fa-trash-alt mr-1"></i> Cancel Selection
                 </button>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100 h-fit">
-                <h3 class="text-lg font-serif font-bold text-gray-900 mb-4 pb-2 border-b">Price Breakdown</h3>
+                <h3 class="text-lg font-serif font-bold text-gray-900 mb-4 pb-2 border-b">Live Pricing Manifest</h3>
                 
                 <div class="space-y-3 text-sm text-gray-600 mb-6">
                     <div class="flex justify-between">
-                        <span>Base Airfare Tier</span>
+                        <span>Calculated Base Fare</span>
                         <span id="summary-base">$0.00</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Luxury Lounge Access</span>
-                        <span class="text-green-600 font-medium">Complimentary</span>
+                        <span>Passenger Multiplier</span>
+                        <span id="summary-passenger-multiplier">1 Passenger</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>International Taxes & Fees</span>
+                        <span>Class Service Adjustment</span>
+                        <span id="summary-class-tier" class="text-gray-900 font-medium">First Class Suite</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>International Flight Taxes</span>
                         <span id="summary-fees">$0.00</span>
                     </div>
                 </div>
@@ -66,13 +117,13 @@
                         <span class="text-gray-900 font-bold">Total Cost</span>
                         <div class="text-right">
                             <span id="summary-total" class="text-2xl font-bold text-[#d71921] block">$0.00</span>
-                            <span class="text-[10px] text-gray-400 uppercase tracking-tighter">Guaranteed Luxury Match Rate</span>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-tighter">Live Rate Tally</span>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="alert('Proceeding safely to secure payment merchant network...')" class="w-full bg-[#111] text-[#c4a47c] font-bold py-3.5 rounded text-center uppercase tracking-widest text-xs transition hover:bg-black shadow-lg">
-                    Proceed to Checkout <i class="fas fa-shield-alt ml-2"></i>
+                <button onclick="navigateToPayment()" class="w-full bg-[#111] text-[#c4a47c] font-bold py-3.5 rounded text-center uppercase tracking-widest text-xs transition hover:bg-black shadow-lg">
+                    Proceed to Payment <i class="fas fa-credit-card ml-2"></i>
                 </button>
             </div>
 
@@ -80,77 +131,123 @@
     </div>
 
     <script>
+        // Global variables to monitor pristine price points
+        let baseTicketPrice = 6500; 
+
         function loadLiveCart() {
             const cartData = JSON.parse(localStorage.getItem('skyLuxuryCart')) || [];
             const container = document.getElementById('cart-container');
             const clearBtn = document.getElementById('clear-btn');
+            const customPanel = document.getElementById('customization-panel');
 
             if (cartData.length === 0) {
                 container.innerHTML = `
                     <div class="bg-white p-12 text-center rounded-xl shadow border border-gray-100">
                         <i class="fas fa-plane-departure text-5xl text-gray-200 mb-4"></i>
                         <h3 class="text-xl font-medium text-gray-700 mb-2">Your Cart is Empty</h3>
-                        <p class="text-gray-400 text-sm mb-6">No premium flight pathways have been picked yet.</p>
-                        <a href="dashboard.html" class="bg-[#d71921] text-white px-6 py-2.5 rounded text-xs font-bold tracking-widest uppercase">Browse Flights</a>
+                        <p class="text-gray-400 text-sm mb-6">No dynamic travel routes have been imported from the dashboard.</p>
+                        <a href="dashboard.html" class="bg-[#d71921] text-white px-6 py-2.5 rounded text-xs font-bold tracking-widest uppercase">Select Flight</a>
                     </div>`;
                 clearBtn.classList.add('hidden');
-                updateCalculations(0);
+                customPanel.classList.add('hidden');
+                updateCalculations(0, 0, 1, 'First');
                 return;
             }
 
             clearBtn.classList.remove('hidden');
-            container.innerHTML = ''; // wipe loading indicators
+            customPanel.classList.remove('hidden');
+            container.innerHTML = ''; 
 
-            cartData.forEach((item, index) => {
-                // Ensure calculations sit flawlessly inside your $6000-$8000 constraint context per ticket
-                let forcedPrice = parseFloat(item.ticketPrice);
-                if(forcedPrice < 6000 || forcedPrice > 8000) {
-                     forcedPrice = Math.floor(Math.random() * (8000 - 6000 + 1)) + 6000;
-                }
+            // Pick up entry arguments extracted directly from dashboard selection
+            const activeFlight = cartData[0];
+            
+            // Re-validate and standardize base data range logic
+            let verifiedBase = parseFloat(activeFlight.ticketPrice);
+            if(isNaN(verifiedBase) || verifiedBase < 5000 || verifiedBase > 8000){
+                verifiedBase = Math.floor(Math.random() * (8000 - 5000 + 1)) + 5000;
+            }
+            baseTicketPrice = verifiedBase; 
 
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 mb-4 relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-[#c4a47c]"></div>
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <span class="bg-amber-50 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded border border-amber-200">${item.classType}</span>
-                                    <span class="text-xs text-gray-400 font-mono">${item.flightNo}</span>
-                                </div>
-                                <h2 class="text-lg font-bold text-gray-800">${item.from} <i class="fas fa-long-arrow-alt-right mx-2 text-[#c4a47c]"></i> ${item.to}</h2>
-                                <p class="text-sm text-gray-500 mt-1"><i class="far fa-calendar-alt mr-1"></i> Departure: <strong>${item.travelDate}</strong></p>
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 mb-4 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-[#c4a47c]"></div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <span id="badge-class-display" class="bg-amber-50 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded border border-amber-200">First Class Suite</span>
+                                <span class="text-xs text-gray-400 font-mono">${activeFlight.flightNo || 'SL-742'}</span>
                             </div>
-                            <div class="text-right">
-                                <span class="text-xl font-bold text-gray-900">$${forcedPrice.toLocaleString()}</span>
-                                <button onclick="removeItem(${index})" class="block text-xs text-red-500 hover:underline mt-2 ml-auto">Cancel</button>
-                            </div>
+                            <h2 class="text-lg font-bold text-gray-800">${activeFlight.from} <i class="fas fa-long-arrow-alt-right mx-2 text-[#c4a47c]"></i> ${activeFlight.to}</h2>
+                            <p class="text-sm text-gray-500 mt-1"><i class="far fa-calendar-alt mr-1"></i> Departure Date: <strong>${activeFlight.travelDate}</strong></p>
                         </div>
-                    </div>`;
-            });
+                        <div class="text-right">
+                            <span id="live-card-price" class="text-xl font-bold text-gray-900">$${baseTicketPrice.toLocaleString()}</span>
+                            <span class="block text-[10px] text-gray-400">per baseline seat</span>
+                        </div>
+                    </div>
+                </div>`;
 
-            // Run aggregate balance tally
-            const aggregateSum = cartData.reduce((accum, curr) => {
-                let p = parseFloat(curr.ticketPrice);
-                return accum + (p >= 6000 && p <= 8000 ? p : (Math.floor(Math.random() * (8000 - 6000 + 1)) + 6000));
-            }, 0);
-
-            updateCalculations(aggregateSum);
+            recalculateTotals();
         }
 
-        function updateCalculations(totalAmount) {
-            let base = totalAmount * 0.92;
-            let taxes = totalAmount * 0.08;
+        function recalculateTotals() {
+            const cartData = JSON.parse(localStorage.getItem('skyLuxuryCart')) || [];
+            if(cartData.length === 0) return;
 
-            document.getElementById('summary-base').innerText = `$${base.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
-            document.getElementById('summary-fees').innerText = `$${taxes.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
-            document.getElementById('summary-total').innerText = `$${totalAmount.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+            // Gather inputs chosen dynamically inside the cart
+            const selectedClass = document.getElementById('cabin-class').value;
+            const adults = parseInt(document.getElementById('count-adults').value) || 0;
+            const children = parseInt(document.getElementById('count-children').value) || 0;
+            const infants = parseInt(document.getElementById('count-infants').value) || 0;
+
+            // Class Modifier Arithmetic Calculations
+            let classMultiplier = 1.0;
+            let classLabel = "First Class Suite";
+            
+            if(selectedClass === 'economy') {
+                classMultiplier = 0.35; // Economy discount reduction factor
+                classLabel = "Economy Class";
+            } else if (selectedClass === 'business') {
+                classMultiplier = 0.65; // Business standard reduction factor
+                classLabel = "Business Class";
+            }
+
+            // Adjust labels live inside active flight badge
+            document.getElementById('badge-class-display').innerText = classLabel;
+
+            // Passenger Category pricing models (Adult: 100%, Child: 75%, Infant: 10%)
+            let passengerCostFactor = (adults * 1.0) + (children * 0.75) + (infants * 0.10);
+            let totalPassengerCount = adults + children + infants;
+
+            // Global Consolidated Math Architecture
+            let structuralTicketCost = baseTicketPrice * classMultiplier;
+            let finalBaseCalculation = structuralTicketCost * passengerCostFactor;
+            let finalTaxesAndFees = finalBaseCalculation * 0.075; // 7.5% Standard luxury travel tax
+            let finalTotalSum = finalBaseCalculation + finalTaxesAndFees;
+
+            // Update UI Interface elements
+            document.getElementById('live-card-price').innerText = `$${structuralTicketCost.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+            document.getElementById('summary-base').innerText = `$${finalBaseCalculation.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+            document.getElementById('summary-passenger-multiplier').innerText = `${totalPassengerCount} Passenger(s) (${adults}A / ${children}C / ${infants}I)`;
+            document.getElementById('summary-class-tier').innerText = classLabel;
+            document.getElementById('summary-fees').innerText = `$${finalTaxesAndFees.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+            document.getElementById('summary-total').innerText = `$${finalTotalSum.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+
+            // Save modified configurations temporarily to runtime storage memory so payment.html catches the updates
+            if(cartData[0]) {
+                cartData[0].ticketPrice = finalTotalSum; 
+                cartData[0].classType = classLabel;
+                localStorage.setItem('skyLuxuryCart', JSON.stringify(cartData));
+            }
         }
 
-        function removeItem(idx) {
-            let currentCart = JSON.parse(localStorage.getItem('skyLuxuryCart')) || [];
-            currentCart.splice(idx, 1);
-            localStorage.setItem('skyLuxuryCart', JSON.stringify(currentCart));
-            loadLiveCart();
+        function navigateToPayment() {
+            const cartData = JSON.parse(localStorage.getItem('skyLuxuryCart')) || [];
+            if (cartData.length === 0) {
+                alert("Your cart is empty. Please configure a flight path before attempting checkout operations.");
+                return;
+            }
+            window.location.href = 'payment.html';
         }
 
         function clearCart() {
@@ -158,7 +255,7 @@
             loadLiveCart();
         }
 
-        // Initialize setup on page visibility initialization
+        // Initialize setup layout triggers
         loadLiveCart();
     </script>
 </body>
