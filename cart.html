@@ -23,7 +23,7 @@
             display: flex;
         }
 
-        /* Sidebar Navigation (Matches Dashboard) */
+        /* Sidebar Navigation (Consistent with Dashboard) */
         .sidebar {
             width: 260px;
             background: rgba(11, 17, 33, 0.95);
@@ -58,7 +58,7 @@
             border-left: 3px solid var(--accent-gold);
         }
 
-        /* Main Content */
+        /* Main Content Area */
         .main-content {
             margin-left: 260px;
             flex: 1;
@@ -74,13 +74,13 @@
             align-items: flex-end;
         }
 
-        /* Cart Items List */
         .cart-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
+        /* Item Row Styling */
         .cart-item {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -89,66 +89,63 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            animation: fadeIn 0.5s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .item-info h3 { color: var(--accent-gold); margin-bottom: 5px; }
-        .item-info p { opacity: 0.6; font-size: 0.9rem; }
+        .item-info h3 { color: var(--accent-gold); margin-bottom: 5px; font-weight: normal; }
+        .item-info p { opacity: 0.6; font-size: 0.85rem; letter-spacing: 1px; }
 
-        .item-price { font-size: 1.3rem; font-weight: bold; }
+        .item-price { font-size: 1.4rem; font-weight: bold; color: var(--text-main); }
 
         .btn-remove {
             background: transparent;
             border: 1px solid #ff4d4d;
             color: #ff4d4d;
-            padding: 5px 12px;
+            padding: 6px 15px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.8rem;
-            margin-left: 20px;
+            font-size: 0.75rem;
+            margin-left: 25px;
+            text-transform: uppercase;
+            transition: 0.3s;
         }
 
         .btn-remove:hover { background: #ff4d4d; color: white; }
 
-        /* Checkout Section */
+        /* Summary Section */
         .checkout-box {
             margin-top: 3rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3rem;
             border-radius: 20px;
             text-align: right;
             border: 1px solid var(--accent-gold);
         }
 
-        .total-label { font-size: 1.2rem; opacity: 0.7; }
-        .total-amount { font-size: 3rem; color: var(--accent-gold); font-weight: bold; margin: 10px 0; }
+        .total-label { font-size: 1.1rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 2px; }
+        .total-amount { font-size: 3.5rem; color: var(--accent-gold); font-weight: bold; margin: 10px 0; }
 
         .btn-payment {
             background: var(--accent-gold);
             color: #0b1121;
             border: none;
-            padding: 1.2rem 3.5rem;
+            padding: 1.2rem 4rem;
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            margin-top: 1rem;
         }
 
         .btn-payment:hover {
             transform: scale(1.05);
-            background: #e2c28d;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.5);
         }
 
-        .empty-msg { text-align: center; padding: 5rem; opacity: 0.5; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .empty-msg { text-align: center; padding: 6rem; opacity: 0.4; font-style: italic; }
     </style>
 </head>
 <body>
@@ -162,15 +159,16 @@
 
     <main class="main-content">
         <div class="cart-header">
-            <h1>Your Luxury Itinerary</h1>
-            <p id="item-count-text">0 Flights Selected</p>
+            <h1>Selected Itineraries</h1>
+            <p id="item-count-text">0 Flights in Cart</p>
         </div>
 
         <div id="cart-items" class="cart-list">
-            </div>
+            <!-- JavaScript populates this -->
+        </div>
 
         <div id="checkout-section" class="checkout-box" style="display: none;">
-            <p class="total-label">Grand Total</p>
+            <p class="total-label">Subtotal</p>
             <div class="total-amount" id="grand-total">$0</div>
             <button class="btn-payment" onclick="proceedToPayment()">Proceed to Payment</button>
         </div>
@@ -178,67 +176,60 @@
 
     <script>
         function loadCart() {
-            const cartItemsContainer = document.getElementById('cart-items');
-            const checkoutSection = document.getElementById('checkout-section');
-            const grandTotalDisplay = document.getElementById('grand-total');
-            const itemCountText = document.getElementById('item-count-text');
+            const container = document.getElementById('cart-items');
+            const checkoutBox = document.getElementById('checkout-section');
+            const grandTotalText = document.getElementById('grand-total');
+            const countText = document.getElementById('item-count-text');
 
-            // Get data from localStorage (saved from dashboard)
+            // Fetch from LocalStorage (Matches key used in dashboard)
             let cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="empty-msg"><h2>Your cart is as empty as the stratosphere.</h2><p>Return to the dashboard to select a destination.</p></div>';
-                checkoutSection.style.display = 'none';
-                itemCountText.innerText = "0 Flights Selected";
+                container.innerHTML = '<div class="empty-msg"><h2>Your private jet is waiting for its first passenger.</h2><p>Browse the dashboard to select your destinations.</p></div>';
+                checkoutBox.style.display = 'none';
+                countText.innerText = "0 Flights in Cart";
                 return;
             }
 
-            checkoutSection.style.display = 'block';
-            cartItemsContainer.innerHTML = '';
+            checkoutBox.style.display = 'block';
+            container.innerHTML = '';
             let total = 0;
 
             cart.forEach((item, index) => {
                 total += item.price;
-                const div = document.createElement('div');
-                div.className = 'cart-item';
-                div.innerHTML = `
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
                     <div class="item-info">
                         <h3>${item.destination}</h3>
-                        <p>First Class Ticket • Priority Boarding • Sky Lux Exclusive</p>
+                        <p>FIRST CLASS • NON-STOP • SKY LUX EXCLUSIVE</p>
                     </div>
                     <div style="display: flex; align-items: center;">
                         <span class="item-price">$${item.price.toLocaleString()}</span>
-                        <button class="btn-remove" onclick="removeFromCart(${index})">Remove</button>
+                        <button class="btn-remove" onclick="removeFlight(${index})">Remove</button>
                     </div>
                 `;
-                cartItemsContainer.appendChild(div);
+                container.appendChild(itemDiv);
             });
 
-            itemCountText.innerText = `${cart.length} Flights Selected`;
-            grandTotalDisplay.innerText = '$' + total.toLocaleString();
+            countText.innerText = `${cart.length} Luxury Flights Selected`;
+            grandTotalText.innerText = '$' + total.toLocaleString();
             
-            // Save the total to use in payment.html
+            // Store total for the payment page to use
             localStorage.setItem('skyLuxTotal', total);
         }
 
-        function removeFromCart(index) {
+        function removeFlight(index) {
             let cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
             cart.splice(index, 1);
             localStorage.setItem('skyLuxCart', JSON.stringify(cart));
-            loadCart(); // Refresh the view
+            loadCart(); 
         }
 
         function proceedToPayment() {
-            // Check if cart is empty before proceeding
-            const cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
-            if(cart.length > 0) {
-                window.location.href = 'payment.html';
-            } else {
-                alert("Your cart is empty.");
-            }
+            window.location.href = 'payment.html';
         }
 
-        // Initial Load
         window.onload = loadCart;
     </script>
 </body>
