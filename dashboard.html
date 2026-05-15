@@ -3,256 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyLuxury | Global Booking Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Sky Lux Airways | Elite Travel</title>
     <style>
         :root {
-            --emirates-red: #d71921;
-            --gold: #d4af37;
-            --dark: #121212;
-            --bg: #f8f9fa;
+            --sky-lux-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --accent-gold: #c5a059;
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Optima', sans-serif;
+            background: var(--sky-lux-bg);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
 
-        body { background: var(--bg); display: flex; }
-
-        /* Sidebar Navigation */
+        /* Sidebar Styling */
         .sidebar {
-            width: 280px;
-            height: 100vh;
-            background: var(--dark);
-            color: white;
-            padding: 30px 20px;
-            position: fixed;
-            left: 0;
-            top: 0;
+            width: 250px;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid rgba(197, 160, 89, 0.3);
             display: flex;
             flex-direction: column;
-            z-index: 100;
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
         }
 
-        .sidebar h2 { color: var(--emirates-red); margin-bottom: 40px; font-size: 22px; letter-spacing: 1px; text-align: center; }
+        .sidebar h2 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            letter-spacing: 3px;
+        }
 
-        .nav-item {
-            padding: 15px;
-            color: #aaa;
+        .sidebar a {
+            color: var(--text-main);
             text-decoration: none;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            transition: 0.3s;
             display: flex;
             align-items: center;
-            gap: 12px;
-            transition: 0.3s;
-            border-radius: 10px;
-            margin-bottom: 10px;
         }
 
-        .nav-item:hover, .nav-item.active { background: #1e1e1e; color: var(--gold); }
-        .nav-item i { width: 20px; text-align: center; }
+        .sidebar a:hover {
+            background: var(--glass);
+            color: var(--accent-gold);
+        }
 
         /* Main Content */
-        .main-content { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 2rem;
+        }
 
-        .header {
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass);
         }
 
-        .welcome-msg h1 { font-size: 26px; color: var(--dark); }
-        .cart-btn {
-            background: var(--emirates-red);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-
-        /* Flight Grid */
-        .flight-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding-top: 2rem;
         }
 
-        .flight-card {
-            background: white;
-            border-radius: 20px;
+        /* Ticket Card Styling */
+        .ticket-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid #efefef;
-            transition: 0.4s ease-in-out;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .flight-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .ticket-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gold);
+        }
 
-        .image-container {
+        .img-container {
+            position: relative;
+            height: 180px;
+        }
+
+        .img-container img {
             width: 100%;
-            height: 170px;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 14px;
-            font-weight: 300;
-            background-size: cover;
-            background-position: center;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .details { padding: 25px; }
-
-        .route {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .price-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-gold);
+            color: #000;
+            padding: 5px 12px;
+            font-weight: bold;
+            border-radius: 20px;
         }
 
-        .code { font-size: 22px; font-weight: 800; color: var(--dark); display: block; }
-        .city { font-size: 12px; color: #888; text-transform: uppercase; }
-
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px dashed #ddd;
+        .card-body {
+            padding: 1.5rem;
         }
 
-        .price { font-size: 24px; font-weight: 700; color: var(--emirates-red); }
+        .card-body h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
 
-        .book-now {
-            background: var(--dark);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+        .card-body p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-cart {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.8rem;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: bold;
+            border-radius: 5px;
             transition: 0.3s;
         }
 
-        .book-now:hover { background: var(--emirates-red); }
+        .btn-cart:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .sidebar { width: 80px; }
-            .sidebar h2, .nav-item span { display: none; }
-            .main-content { margin-left: 80px; width: calc(100% - 80px); }
+        #cart-counter {
+            background: var(--accent-gold);
+            color: black;
+            padding: 2px 8px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <h2>SKY LUXURY</h2>
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i> <span>Home</span></a>
-        <a href="#" class="nav-item active"><i class="fas fa-plane"></i> <span>Search Flights</span></a>
-        <a href="cart.html" class="nav-item"><i class="fas fa-shopping-cart"></i> <span>My Cart</span></a>
-        <a href="booking.html" class="nav-item"><i class="fas fa-list-ul"></i> <span>Live Bookings</span></a>
-        <a href="login.html" class="nav-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
-    </aside>
+<div class="sidebar">
+    <h2>SKY LUX</h2>
+    <a href="index.html">Dashboard</a>
+    <a href="booking.html">Bookings</a>
+    <a href="cart.html">Cart <span id="cart-counter">0</span></a>
+</div>
 
-    <main class="main-content">
-        <header class="header">
-            <div class="welcome-msg">
-                <h1>Welcome, <span id="user-name">Guest</span></h1>
-                <p>Global routes at your fingertips.</p>
+<div class="main-content">
+    <header>
+        <h1>Global Destinations</h1>
+        <p>Premium First Class Routes</p>
+    </header>
+
+    <div class="grid" id="ticket-grid">
+        </div>
+</div>
+
+<script>
+    const destinations = [
+        { country: "USA", state: "New York", city: "Manhattan" },
+        { country: "USA", state: "California", city: "Los Angeles" },
+        { country: "France", state: "Île-de-France", city: "Paris" },
+        { country: "Japan", state: "Kanto", city: "Tokyo" },
+        { country: "UAE", state: "Dubai", city: "Dubai City" },
+        { country: "UK", state: "England", city: "London" },
+        { country: "Italy", state: "Lazio", city: "Rome" },
+        { country: "Australia", state: "NSW", city: "Sydney" },
+        { country: "Singapore", state: "Central", city: "Marina Bay" },
+        { country: "Germany", state: "Berlin", city: "Berlin" }
+    ];
+
+    const grid = document.getElementById('ticket-grid');
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCounter() {
+        document.getElementById('cart-counter').innerText = cart.length;
+    }
+
+    // Generate 100 Tickets
+    for (let i = 1; i <= 100; i++) {
+        const data = destinations[i % destinations.length];
+        const price = Math.floor(Math.random() * (12000 - 3000) + 3000);
+        
+        const card = document.createElement('div');
+        card.className = 'ticket-card';
+        card.innerHTML = `
+            <div class="img-container">
+                <img src="https://picsum.photos/seed/${i + 50}/400/300" alt="City View">
+                <span class="price-tag">$${price.toLocaleString()}</span>
             </div>
-            <a href="cart.html" class="cart-btn">
-                <i class="fas fa-cart-arrow-down"></i> Cart: <span id="cart-count">0</span>
-            </a>
-        </header>
-
-        <div class="flight-grid" id="flight-grid">
+            <div class="card-body">
+                <h3>${data.city}, ${data.state}</h3>
+                <p>${data.country} | Luxury Airways</p>
+                <button class="btn-cart" onclick="addToCart('${data.city}', ${price})">Add to Cart</button>
             </div>
-    </main>
+        `;
+        grid.appendChild(card);
+    }
 
-    <script>
-        // Personalization
-        document.getElementById('user-name').innerText = localStorage.getItem('userName') || "Passenger";
+    function addToCart(city, price) {
+        cart.push({ city, price, id: Date.now() });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCounter();
+        alert(city + " has been added to your Sky Lux cart.");
+    }
 
-        const routes = [
-            { f: "JFK", fn: "New York", t: "LHR", tn: "London", p: 1250 },
-            { f: "DXB", fn: "Dubai", t: "CDG", tn: "Paris", p: 890 },
-            { f: "LAX", fn: "Los Angeles", t: "HND", tn: "Tokyo", p: 1100 },
-            { f: "YYZ", fn: "Toronto", t: "FCO", tn: "Rome", p: 920 },
-            { f: "MIA", fn: "Miami", t: "EZE", tn: "Buenos Aires", p: 750 },
-            { f: "SFO", fn: "San Francisco", t: "SYD", tn: "Sydney", p: 1450 },
-            { f: "ORD", fn: "Chicago", t: "FRA", tn: "Frankfurt", p: 880 },
-            { f: "ATL", fn: "Atlanta", t: "MEX", tn: "Mexico City", p: 420 },
-            { f: "DFW", fn: "Dallas", t: "GRU", tn: "Sao Paulo", p: 980 },
-            { f: "BOS", fn: "Boston", t: "DUB", tn: "Dublin", p: 680 },
-            { f: "SEA", fn: "Seattle", t: "ICN", tn: "Seoul", p: 1150 },
-            { f: "LAS", fn: "Las Vegas", t: "HNL", tn: "Honolulu", p: 390 },
-            { f: "YVR", fn: "Vancouver", t: "AKL", tn: "Auckland", p: 1300 },
-            { f: "LHR", fn: "London", t: "CPT", tn: "Cape Town", p: 1200 },
-            { f: "SIN", fn: "Singapore", t: "BKK", tn: "Bangkok", p: 250 },
-            { f: "HKG", fn: "Hong Kong", t: "TPE", tn: "Taipei", p: 310 },
-            { f: "IST", fn: "Istanbul", t: "DXB", tn: "Dubai", p: 550 },
-            { f: "MAD", fn: "Madrid", t: "LIS", tn: "Lisbon", p: 140 },
-            { f: "AMS", fn: "Amsterdam", t: "ZRH", tn: "Zurich", p: 220 },
-            { f: "CPH", fn: "Copenhagen", t: "OSL", tn: "Oslo", p: 180 },
-            { f: "DEL", fn: "New Delhi", t: "SIN", tn: "Singapore", p: 480 },
-            { f: "MEL", fn: "Melbourne", t: "CHC", tn: "Christchurch", p: 320 },
-            { f: "PHX", fn: "Phoenix", t: "YYC", tn: "Calgary", p: 450 },
-            { f: "DEN", fn: "Denver", t: "KEF", tn: "Iceland", p: 790 },
-            { f: "BCN", fn: "Barcelona", t: "ATH", tn: "Athens", p: 280 },
-            { f: "YUL", fn: "Montreal", t: "CDG", tn: "Paris", p: 810 },
-            { f: "MEX", fn: "Mexico City", t: "LIM", tn: "Lima", p: 540 },
-            { f: "CAI", fn: "Cairo", t: "IST", tn: "Istanbul", p: 360 },
-            { f: "MNL", fn: "Manila", t: "NRT", tn: "Tokyo", p: 490 },
-            { f: "BNE", fn: "Brisbane", t: "NAN", tn: "Fiji", p: 560 }
-        ];
+    updateCounter();
+</script>
 
-        const grid = document.getElementById('flight-grid');
-
-        routes.forEach(route => {
-            grid.innerHTML += `
-                <div class="flight-card">
-                    <div class="image-container">[ Luxury Image of ${route.tn} ]</div>
-                    <div class="details">
-                        <div class="route">
-                            <div><span class="code">${route.f}</span><span class="city">${route.fn}</span></div>
-                            <i class="fas fa-plane" style="color: var(--gold)"></i>
-                            <div><span class="code">${route.t}</span><span class="city">${route.tn}</span></div>
-                        </div>
-                        <p style="font-size: 13px; color: #777;"><i class="far fa-clock"></i> Scheduled • Economy/Business</p>
-                        <div class="price-row">
-                            <span class="price">$${route.p}</span>
-                            <button class="book-now" onclick="addToCart('${route.fn} to ${route.tn}', ${route.p})">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        function addToCart(item, price) {
-            let cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
-            cart.push({ flight: item, price: price });
-            localStorage.setItem('airlineCart', JSON.stringify(cart));
-            updateCart();
-            alert(item + " added to your cart!");
-        }
-
-        function updateCart() {
-            let cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
-            document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        updateCart();
-    </script>
 </body>
 </html>
