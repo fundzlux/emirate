@@ -3,57 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Cart | SkyLuxury</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Your Selection | Sky Lux Airways</title>
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; padding: 50px; }
-        .cart-container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h2 { border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
-        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
-        .total-section { margin-top: 20px; font-size: 20px; font-weight: 700; text-align: right; color: #d71921; }
-        .checkout-btn { width: 100%; padding: 15px; background: #d71921; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        .clear-btn { background: none; border: none; color: #999; cursor: pointer; font-size: 12px; text-decoration: underline; }
+        :root {
+            --sky-lux-bg: #0b1121;
+            --accent-gold: #c5a059;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Optima', 'Segoe UI', serif;
+            background: linear-gradient(135deg, #0b1121 0%, #1a253c 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Navigation (Matches Dashboard) */
+        .sidebar {
+            width: 260px;
+            background: rgba(11, 17, 33, 0.95);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            padding: 2rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--glass);
+            color: var(--accent-gold);
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 4rem;
+        }
+
+        .cart-header {
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        /* Cart Items List */
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cart-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .item-info h3 { color: var(--accent-gold); margin-bottom: 5px; }
+        .item-info p { opacity: 0.6; font-size: 0.9rem; }
+
+        .item-price { font-size: 1.3rem; font-weight: bold; }
+
+        .btn-remove {
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 20px;
+        }
+
+        .btn-remove:hover { background: #ff4d4d; color: white; }
+
+        /* Checkout Section */
+        .checkout-box {
+            margin-top: 3rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: right;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .total-label { font-size: 1.2rem; opacity: 0.7; }
+        .total-amount { font-size: 3rem; color: var(--accent-gold); font-weight: bold; margin: 10px 0; }
+
+        .btn-payment {
+            background: var(--accent-gold);
+            color: #0b1121;
+            border: none;
+            padding: 1.2rem 3.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-payment:hover {
+            transform: scale(1.05);
+            background: #e2c28d;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+        }
+
+        .empty-msg { text-align: center; padding: 5rem; opacity: 0.5; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="cart-container">
-        <h2>Your Flight Bookings</h2>
-        <div id="cart-items-list">
-            </div>
-        <div class="total-section">
-            Total: $<span id="total-price">0</span>
+    <aside class="sidebar">
+        <div class="logo">SKY LUX</div>
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="bookings.html" class="nav-link">Bookings</a>
+        <a href="cart.html" class="nav-link active">My Cart</a>
+    </aside>
+
+    <main class="main-content">
+        <div class="cart-header">
+            <h1>Your Luxury Itinerary</h1>
+            <p id="item-count-text">0 Flights Selected</p>
         </div>
-       <button class="checkout-btn" onclick="window.location.href='payment.html'">Proceed to Payment</button>
-        <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
-        <p><a href="dashboard.html" style="color: #666; font-size: 14px; text-decoration: none;">← Continue Booking</a></p>
-    </div>
+
+        <div id="cart-items" class="cart-list">
+            </div>
+
+        <div id="checkout-section" class="checkout-box" style="display: none;">
+            <p class="total-label">Grand Total</p>
+            <div class="total-amount" id="grand-total">$0</div>
+            <button class="btn-payment" onclick="proceedToPayment()">Proceed to Payment</button>
+        </div>
+    </main>
 
     <script>
-        function displayCart() {
-            let cart = JSON.parse(localStorage.getItem('airlineCart')) || [];
-            let list = document.getElementById('cart-items-list');
-            let total = 0;
-            list.innerHTML = "";
+        function loadCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const checkoutSection = document.getElementById('checkout-section');
+            const grandTotalDisplay = document.getElementById('grand-total');
+            const itemCountText = document.getElementById('item-count-text');
 
-            if(cart.length === 0) {
-                list.innerHTML = "<p>Your cart is empty.</p>";
+            // Get data from localStorage (saved from dashboard)
+            let cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-msg"><h2>Your cart is as empty as the stratosphere.</h2><p>Return to the dashboard to select a destination.</p></div>';
+                checkoutSection.style.display = 'none';
+                itemCountText.innerText = "0 Flights Selected";
+                return;
             }
 
-            cart.forEach(item => {
-                list.innerHTML += `<div class="cart-item"><span>${item.flight}</span> <strong>$${item.price}</strong></div>`;
+            checkoutSection.style.display = 'block';
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
                 total += item.price;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <div class="item-info">
+                        <h3>${item.destination}</h3>
+                        <p>First Class Ticket • Priority Boarding • Sky Lux Exclusive</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="item-price">$${item.price.toLocaleString()}</span>
+                        <button class="btn-remove" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(div);
             });
 
-            document.getElementById('total-price').innerText = total.toLocaleString();
+            itemCountText.innerText = `${cart.length} Flights Selected`;
+            grandTotalDisplay.innerText = '$' + total.toLocaleString();
+            
+            // Save the total to use in payment.html
+            localStorage.setItem('skyLuxTotal', total);
         }
 
-        function clearCart() {
-            localStorage.removeItem('airlineCart');
-            displayCart();
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('skyLuxCart', JSON.stringify(cart));
+            loadCart(); // Refresh the view
         }
 
-        displayCart();
+        function proceedToPayment() {
+            // Check if cart is empty before proceeding
+            const cart = JSON.parse(localStorage.getItem('skyLuxCart')) || [];
+            if(cart.length > 0) {
+                window.location.href = 'payment.html';
+            } else {
+                alert("Your cart is empty.");
+            }
+        }
+
+        // Initial Load
+        window.onload = loadCart;
     </script>
 </body>
 </html>
